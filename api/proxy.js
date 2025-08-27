@@ -6,7 +6,6 @@ export default async function handler(req, res) {
     return;
   }
 
-  // Build raw.githubusercontent.com URL
   const targetUrl = `https://raw.githubusercontent.com/CoolUBG/coolubg-list/main/${path}`;
 
   try {
@@ -16,10 +15,9 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Pass through content type (HTML, JS, CSS, images…)
-    res.setHeader("Content-Type", response.headers.get("content-type"));
-    const buffer = await response.arrayBuffer();
-    res.send(Buffer.from(buffer));
+    const html = await response.text();
+    res.setHeader("Content-Type", "text/html"); // important
+    res.send(html);
   } catch (err) {
     res.status(500).send("Proxy error: " + err.message);
   }
